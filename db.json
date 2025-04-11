@@ -1,0 +1,18 @@
+{
+    "lowongan": [
+      { "id": 1, "posisi": "Software Engineer", "deskripsi": "Membangun aplikasi web" },
+      { "id": 2, "posisi": "Data Scientist", "deskripsi": "Menganalisis data besar" }
+    ],
+    "cv": [],
+    "psikotest": {
+      "1": [
+        { "id": 101, "pertanyaan": "Apa yang Anda lakukan jika terjadi konflik di tim?" },
+        { "id": 102, "pertanyaan": "Bagaimana cara Anda menangani deadline ketat?" }
+      ],
+      "2": [
+        { "id": 201, "pertanyaan": "Jelaskan konsep machine learning!" },
+        { "id": 202, "pertanyaan": "Bagaimana cara kerja algoritma decision tree?" }
+      ]
+    }
+  }
+  

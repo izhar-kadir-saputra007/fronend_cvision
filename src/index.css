@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html{
+      font-family: "Poppins", sans-serif, serif;
+  }
+}
+
+.text-shadow-custom {
+  text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.35); /* Custom text shadow */
+}
+
+/* Atur gaya untuk elemen Lottie dengan kelas lottie-element */
+.lottie-element {
+  width: 50px;   /* Contoh ukuran */
+  height: 50px;
+  background-color: #ffe100; /* Contoh background color */
+  /* Tambahkan gaya lain sesuai kebutuhan */
+}
+
+
+.encrypted {
+  color: #9290C3; 
+ /* Sesuaikan dengan nilai warna */
+  letter-spacing: 0.1em; /* Sesuaikan dengan 'tracking-widest' */
+  font-size: 1.6rem; /* Default untuk text-2xl (24px) */
+  margin-bottom: 2.5rem; /* mb-10 (40px) */
+}
