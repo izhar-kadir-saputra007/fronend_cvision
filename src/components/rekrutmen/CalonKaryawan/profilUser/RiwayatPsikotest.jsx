@@ -9,7 +9,7 @@ const RiwayatPsikotest = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/getTotalSkorUserPremium", {
+                const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getTotalSkorUserPremium`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

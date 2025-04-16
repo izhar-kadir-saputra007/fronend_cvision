@@ -49,7 +49,7 @@ const TestPage = () => {
         throw new Error("User is not logged in.");
       }
       const response = await axios.post(
-        "http://localhost:3000/api/predict",
+        `${import.meta.env.VITE_BASE_URL}/api/predict`,
         formData,
         {
           headers: {

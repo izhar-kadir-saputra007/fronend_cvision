@@ -1,7 +1,6 @@
 import {
   Typography,
   Box,
-  Paper,
   Grid,
   Stack,
   Card,

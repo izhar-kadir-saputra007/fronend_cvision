@@ -43,7 +43,7 @@ const PsikotestPage = () => {
       try {
         // Ambil durasi timer dari API
         const timerResponse = await axios.get(
-          "http://localhost:3000/api/getTimerDuration",
+          `${import.meta.env.VITE_BASE_URL}/api/getTimerDuration`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setTimerDuration(timerResponse.data.timerDuration * 60);
@@ -160,7 +160,7 @@ const PsikotestPage = () => {
   const fetchQuestions = async (jenisSoalId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/getSoalPsikotesByJenisSoalId/${jenisSoalId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/getSoalPsikotesByJenisSoalId/${jenisSoalId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -229,8 +229,8 @@ const PsikotestPage = () => {
         }));
 
         const endpoint = lamaranId 
-          ? `http://localhost:3000/api/submitBulkJawabanPsikotes/${jenisSoalId}/${lamaranId}`
-          : `http://localhost:3000/api/submitBulkJawabanPsikotes/${jenisSoalId}`;
+          ? `${import.meta.env.VITE_BASE_URL}/api/submitBulkJawabanPsikotes/${jenisSoalId}/${lamaranId}`
+          : `${import.meta.env.VITE_BASE_URL}/api/submitBulkJawabanPsikotes/${jenisSoalId}`;
 
         const response = await axios.post(endpoint, formattedAnswers, {
           headers: { Authorization: `Bearer ${token}` },

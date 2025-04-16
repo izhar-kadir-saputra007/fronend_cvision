@@ -34,7 +34,7 @@ const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleAnimationComplete = () => {
-    console.log("Animation completed!");
+   
   };
 
   const containerRef = useRef(null);
@@ -62,7 +62,7 @@ const HomePage = () => {
 
         // Ambil data pengguna dari backend API
         const response = await axios.get(
-          `http://localhost:3000/api/users/${userId}`,
+          `${import.meta.env.VITE_BASE_URL}/api/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

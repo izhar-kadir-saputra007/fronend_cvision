@@ -12,7 +12,7 @@ const PaymentStatus = () => {
       if (orderId) {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/checkPaymentStatus?order_id=${orderId}`,
+            `${import.meta.env.VITE_BASE_URL}/api/checkPaymentStatus?order_id=${orderId}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -38,7 +38,7 @@ export default function LamaranDropdown({ lamaranId }) {
     const fetchLamaranDetails = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/api/getLamaranForUser`, {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getLamaranForUser`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -87,7 +87,7 @@ export default function LamaranDropdown({ lamaranId }) {
     try {
       setUploading(true);
       const response = await axios.post(
-        `http://localhost:3000/api/upload-cv/${lamaranId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/upload-cv/${lamaranId}`,
         formData,
         {
           headers: {
@@ -101,7 +101,7 @@ export default function LamaranDropdown({ lamaranId }) {
         alert('CV berhasil diunggah.');
         // Refresh data lamaran setelah upload
         const token = localStorage.getItem('token');
-        const updatedResponse = await axios.get(`http://localhost:3000/api/getLamaranForUser`, {
+        const updatedResponse = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getLamaranForUser`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

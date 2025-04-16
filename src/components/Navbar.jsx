@@ -41,7 +41,7 @@ function Navbar() {
 
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/validateToken",
+          `${import.meta.env.VITE_BASE_URL}/api/validateToken`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -85,7 +85,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.delete("http://localhost:3000/api/logout");
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/api/logout`);
       localStorage.removeItem("token");
       localStorage.removeItem("role");
       localStorage.removeItem("lamaranId");

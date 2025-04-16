@@ -17,7 +17,7 @@ const LamaranList = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:3000/api/getLamaranForUser', {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getLamaranForUser`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/login`, {
         email,
         password,
       });

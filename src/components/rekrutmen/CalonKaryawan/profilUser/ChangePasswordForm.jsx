@@ -57,7 +57,7 @@ const ChangePasswordForm = () => {
         }
 
         const response = await axios.put(
-          'http://localhost:3000/api/changePassword',
+          `${import.meta.env.VITE_BASE_URL}/api/changePassword`,
           {
             currentPassword: values.currentPassword,
             newPassword: values.newPassword,

@@ -18,8 +18,8 @@ const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
         
         const token = localStorage.getItem("token");
         const endpoint = lamaranId
-          ? `http://localhost:3000/api/getJenisSoalByLamaranId/${lamaranId}`
-          : 'http://localhost:3000/api/getJenisSoalByUserId';
+          ? `${import.meta.env.VITE_BASE_URL}/api/getJenisSoalByLamaranId/${lamaranId}`
+          : `${import.meta.env.VITE_BASE_URL}/api/getJenisSoalByUserId`;
         
         const url = `${endpoint}?t=${Date.now()}`;
         

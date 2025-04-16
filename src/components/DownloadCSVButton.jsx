@@ -1,7 +1,7 @@
 const DownloadCSVButton = ({ type }) => {
     const handleDownload = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/downloadCSV/${type}`);
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/downloadCSV/${type}`);
         
         if (!response.ok) throw new Error("Gagal mengunduh file!");
   

@@ -26,7 +26,7 @@ const RegisterAdminPT = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/registerAdminPT", formData);
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/registerAdminPT`, formData);
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");

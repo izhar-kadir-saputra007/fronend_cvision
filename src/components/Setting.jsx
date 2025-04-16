@@ -10,7 +10,7 @@ const Setting = () => {
     const fetchTimerDuration = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/api/getTimerDuration", {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getTimerDuration`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ const Setting = () => {
     try {
       console.log("Timer Duration:", numericTimerDuration);  // Log untuk memastikan nilai yang dikirim
       const response = await axios.put(
-        "http://localhost:3000/api/setTimerDuration",
+        `${import.meta.env.VITE_BASE_URL}/api/setTimerDuration`,
         { timerDuration: numericTimerDuration }, // Kirim sebagai angka
         {
           headers: {

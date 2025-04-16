@@ -9,7 +9,7 @@ const PremiumPayment = () => {
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/createPremiumUser', {}, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/createPremiumUser`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Asumsikan token disimpan di localStorage
         },

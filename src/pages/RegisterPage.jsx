@@ -16,7 +16,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/users", {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/users`, {
         name,
         phoneNumber,
         email,

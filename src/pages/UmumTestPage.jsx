@@ -48,7 +48,7 @@ const UmumTestPage = () => {
   
       // Kirim request ke endpoint predictCVUmum
       const response = await axios.post(
-        "http://localhost:3000/api/predictCVUmum", // Endpoint baru
+        `${import.meta.env.VITE_BASE_URL}/api/predictCVUmum`, // Endpoint baru
         formData,
         {
           headers: {

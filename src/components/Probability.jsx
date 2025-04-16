@@ -31,7 +31,7 @@ const Probability = () => {
         setLoading(false);
         return;
       }
-      const response = await axios.get("http://localhost:3000/api/users", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,7 +59,7 @@ const Probability = () => {
         setLoading(false);
         return;
       }
-      const response = await axios.get("http://localhost:3000/api/users/probability", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/users/probability`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { minProbability, minScore }, // Mengirimkan minProbability dan minScore
       });
@@ -102,7 +102,7 @@ const Probability = () => {
 
       if (passedUsers.length > 0) {
         const response = await axios.post(
-          "http://localhost:3000/api/sendPassedUsers", 
+          `${import.meta.env.VITE_BASE_URL}/api/sendPassedUsers`, 
           { users: passedUsers, minScore, minProbability }, // Pastikan data dikirim dalam format yang benar
           {
             headers: {

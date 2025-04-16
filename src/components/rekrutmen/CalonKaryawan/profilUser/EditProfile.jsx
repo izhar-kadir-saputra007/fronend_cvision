@@ -37,7 +37,7 @@ const EditProfile = ({ onCancel, onSaveSuccess, initialData }) => {
       const fetchProfile = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get('http://localhost:3000/api/getUserProfile', {
+          const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getUserProfile`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -81,7 +81,7 @@ const EditProfile = ({ onCancel, onSaveSuccess, initialData }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        'http://localhost:3000/api/editProfile', 
+        `${import.meta.env.VITE_BASE_URL}/api/editProfile`, 
         formData, 
         {
           headers: {

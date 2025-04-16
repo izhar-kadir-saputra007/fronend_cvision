@@ -36,7 +36,7 @@ const UserList = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/api/users", {
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +65,7 @@ const UserList = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/downloadPDF/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/downloadPDF/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ const UserList = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/send-whatsapp-report/${userId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/send-whatsapp-report/${userId}`,
         {},
         {
           headers: {

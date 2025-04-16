@@ -10,7 +10,7 @@ const LowonganList = () => {
   useEffect(() => {
     const fetchLowongan = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/getAllLowongan');
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getAllLowongan`);
         setLowongan(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -25,7 +25,7 @@ const LowonganList = () => {
   const handleApply = async (lowonganId) => {
     try {
       // Kirim permintaan apply ke API
-      const response = await axios.post(`http://localhost:3000/api/applyToLowongan/${lowonganId}/aply`, {}, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/applyToLowongan/${lowonganId}/aply`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Asumsikan token disimpan di localStorage
         },

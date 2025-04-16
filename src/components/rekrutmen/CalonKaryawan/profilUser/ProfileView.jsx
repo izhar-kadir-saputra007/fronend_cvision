@@ -13,7 +13,7 @@ const ProfileView = ({ onEditClick, profileData: initialProfileData }) => {
       const fetchProfile = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get('http://localhost:3000/api/getUserProfile', {
+          const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/getUserProfile`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
