@@ -29,6 +29,7 @@ import AdminPage from './pages/AdminPage.jsx'
 import AdminEditUser from './pages/AdminEditUser.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminSetting from './pages/AdminSetting.jsx';
+import ApplicantsByLowongan from './pages/rekrutmen/AdminPt/ApplicantsByLowongan.jsx';
 
 import { AdminPTRoutes } from './routers/adminPTRoutes.jsx';
 
@@ -97,6 +98,11 @@ const router = createBrowserRouter([
   {
     path: '/setting',
     element: <SettingPage />,
+  },
+  {
+    path: '/applicants/:lowonganId',
+    element: <ApplicantsByLowongan />,
+   
   },
 
   {

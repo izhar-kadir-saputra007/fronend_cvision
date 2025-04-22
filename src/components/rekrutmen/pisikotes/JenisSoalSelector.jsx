@@ -30,17 +30,28 @@ const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
 
         if (response.data?.data) {
           setJenisSoal(response.data.data);
+          console.log("Data jenis soal:", response.data.data);
         } else {
           throw new Error("Data format tidak valid");
         }
       } catch (err) {
         if (!axios.isCancel(err)) {
           console.error("Error fetching jenis soal:", err);
-          setError(err.message || 
-            (lamaranId 
-              ? "Gagal memuat tes yang perlu dikerjakan" 
-              : "Gagal memuat daftar tes")
-          );
+          
+          // Handle 404 response specifically
+          if (err.response?.status === 404) {
+            setError(err.response.data?.message || "Tidak ada tes yang perlu dikerjakan");
+            // Remove lamaranId from localStorage if it exists
+            if (lamaranId) {
+              localStorage.removeItem("lamaranId");
+            }
+          } else {
+            setError(err.message || 
+              (lamaranId 
+                ? "Gagal memuat tes yang perlu dikerjakan" 
+                : "Gagal memuat daftar tes")
+            );
+          }
         }
       } finally {
         if (!signal.aborted) {
@@ -80,12 +91,14 @@ const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
         </h2>
         <div className="text-red-500 p-4 text-center">
           <p>{error}</p>
-          <button 
-            onClick={handleRetry}
-            className="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
-          >
-            Coba Lagi
-          </button>
+          {!error.includes("Tidak ada") && (
+            <button 
+              onClick={handleRetry}
+              className="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
+            >
+              Coba Lagi
+            </button>
+          )}
         </div>
       </div>
     );
