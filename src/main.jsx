@@ -24,16 +24,23 @@ import LamaranUser from './pages/rekrutmen/CalonKaryawan/LamaranUser.jsx';
 import ProfilePage from './pages/rekrutmen/CalonKaryawan/ProfilePage.jsx';
 import RegisterAdminPT from './pages/rekrutmen/AdminPt/RegisterAdminPT.jsx';
 import SettingPage from './pages/rekrutmen/CalonKaryawan/SettingPage.jsx';
+import PremiumUpgradePage from './pages/PremiumUpgradePage.jsx';
+import PanduanPengguna from "./pages/rekrutmen/PanduanPengguna.jsx"
 
 import AdminPage from './pages/AdminPage.jsx'
 import AdminEditUser from './pages/AdminEditUser.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import AdminSetting from './pages/AdminSetting.jsx';
 import ApplicantsByLowongan from './pages/rekrutmen/AdminPt/ApplicantsByLowongan.jsx';
+import PaymentCallback from './pages/rekrutmen/AdminPt/PaymentCallback.jsx';
 
 import { AdminPTRoutes } from './routers/adminPTRoutes.jsx';
 
 const router = createBrowserRouter([
+
+//router untuk payment callback
+
+
   {
     path: '/home',
     element: <HomePage />,
@@ -80,6 +87,14 @@ const router = createBrowserRouter([
   {
     path: '/karir',
     element: <KarirPage />,
+  },
+  {
+    path: '/panduanpengguna',
+    element: <PanduanPengguna />,
+  },
+  {
+    path: '/premium',
+    element: <PremiumUpgradePage />,
   },
 
   // Rute untuk halaman profil user
@@ -139,11 +154,22 @@ const router = createBrowserRouter([
     ),
   },
 
+  //router untuk payment callback
+  
+
   // Rute untuk halaman admin PT, hanya bisa diakses oleh pengguna yang sudah login
   {
     path: '/adminpt/*', // Gunakan wildcard untuk nested routes
     element: <AdminPTRoutes />,
   },
+
+  // Rute untuk callback pembayaran (taruh di luar nested routes)
+  // Rute untuk callback pembayaran
+  {
+    path: '/payment-callback/:status',
+    element: <PaymentCallback /> 
+  } 
+
 ],
 {
   future: {

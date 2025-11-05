@@ -16,7 +16,7 @@ function Navbar() {
   const [isLoading, setIsLoading] = useState(true); // Tambahkan state loading
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isOpenDropDown, setIsOpenDropDown] = useState(false);
+  
 
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -122,9 +122,9 @@ function Navbar() {
   };
 
   let aktif =
-    "text-secondary border-b-2 border-secondary font-bold  px-2 scale-105";
+    "text-secondary border-b-2 border-secondary font-bold px-1 sm:px-2 scale-105";
   let scrollAktif = scroll
-    ? " bg:primary border-b-2 border-secondary py-2 shadow-custom"
+    ? "bg-primary border-b-2 border-secondary py-1 sm:py-2 shadow-custom"
     : "";
   let menuAktif = isOpen ? "left-0" : "-left-full";
 
@@ -132,90 +132,50 @@ function Navbar() {
     <div
       className={`navbar fixed w-full transition-all bg-primary z-50 ${scrollAktif}`}
     >
-      <div className="container mx-auto px-6 pt-7 pb-5">
+      <div className="container mx-auto px-4 sm:px-6 pt-3 sm:pt-5 md:pt-6 pb-2 sm:pb-4">
         <div className="navbar-box flex items-center justify-between">
-          <div className="logo flex items-center justify-between">
-            <img src={logo} alt="logo" className="w-[50px] -z-10" />
-            <h1 className="md:ml-4 sm:text-2xl text-color3 text-xl hover:text-color2 font-bold">
-              <span className="text-secondary font-bodoni text-3xl">CV</span>
-              <span className="text-color1 font-bodoni">ision.</span>
+          {/* Logo Section - Diperkecil untuk mobile */}
+          <div className="logo flex items-center font-bodoni">
+            <img
+              src={logo}
+              alt="logo"
+              className="w-[30px] sm:w-[40px] md:w-[50px] -z-10" // Diperkecil di mobile
+            />
+            <h1 className="ml-2 md:ml-4 text-lg sm:text-xl md:text-2xl text-color3 hover:text-color2 font-bold">
+              <span className="text-secondary  text-xl md:text-3xl">CV</span>
+              <span className="text-color1 ">ision.</span>
             </h1>
           </div>
+
+          {/* Menu Items */}
           <ul
-            className={`flex lg:gap-12 md:static md:flex-row md:shadow-none md:bg-primary md:w-auto md:h-full md:translate-y-0 md:text-black md:p-0 md:m-auto gap-8 fixed ${menuAktif} top-1/2 -translate-y-1/2 flex-col px-8 py-6 rounded shadow-xl bg-secondary font-bold text-color2 transition-all`}
+            className={`flex lg:gap-12 md:static md:flex-row md:shadow-none md:bg-primary md:w-auto md:h-full md:translate-y-0 md:text-black md:p-0 md:m-auto gap-8 fixed ${menuAktif} top-1/2 -translate-y-1/2 flex-col px-14 py-16 rounded  bg-primary shadow-custom text-color3 text-lg sm:text-xl md:text-2xl  font-bold transition-all`}
           >
             {/* Home */}
             <li className="flex items-center gap-3">
               <i className="ri-home-4-line text-3xl md:hidden text-color2"></i>
               <NavLink
                 to="/home"
-                className="font-medium text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2"
+                className="font-medium text-base text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2"
               >
                 Home
               </NavLink>
             </li>
 
-            {/* Dropdown Service */}
-            <li
-              className="relative group"
-              onMouseEnter={() => setIsOpenDropDown(true)}
-              onMouseLeave={() => setIsOpenDropDown(false)}
-            >
+            {/* CV Prediction - Umum only */}
+            <li>
               <NavLink
-                to="#"
-                className={`text-color2 transition-all px-2 py-2 ${
-                  isOpenDropDown
-                    ? "text-secondary border-b-2 border-secondary font-bold"
-                    : "hover:text-secondary hover:border-b-2 border-transparent hover:font-bold font-medium"
-                }`}
+                to="/umumtest"
+                className={({ isActive }) =>
+                  `text-color2 transition-all px-2 py-2 text-base ${
+                    isActive
+                      ? "text-secondary border-b-2 border-secondary font-bold"
+                      : "hover:text-secondary hover:border-b-2 border-transparent hover:font-bold font-medium"
+                  }`
+                }
               >
                 CV Prediction
               </NavLink>
-
-              {/* Dropdown Menu */}
-              {isOpenDropDown && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-primary shadow-md shadow-primary ring-1 ring-secondary ring-opacity-50 focus:outline-none transition-all scale-100 opacity-100"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabIndex="-1"
-                >
-                  <div className="py-1" role="none">
-                    <NavLink
-                      to="/test"
-                      className={({ isActive }) =>
-                        `block px-4 py-2 text-color2 transition-all ${
-                          isActive
-                            ? "text-secondary font-bold border-b-2 border-secondary"
-                            : "hover:text-secondary hover:border-b-2 border-transparent hover:font-bold"
-                        }`
-                      }
-                      onClick={(e) => {
-                        setIsOpenDropDown(false);
-                        checkLoginAndRedirect(e, "/test");
-                      }}
-                    >
-                      Khusus
-                    </NavLink>
-                    <NavLink
-                      to="/umumtest"
-                      className={({ isActive }) =>
-                        `block px-4 py-2 text-color2 transition-all ${
-                          isActive
-                            ? "text-secondary font-bold border-b-2 border-secondary"
-                            : "hover:text-secondary hover:border-b-2 border-transparent hover:font-bold"
-                        }`
-                      }
-                      onClick={() => {
-                        setIsOpenDropDown(false);
-                      }}
-                    >
-                      Umum
-                    </NavLink>
-                  </div>
-                </div>
-              )}
             </li>
 
             {/* Artikel */}
@@ -224,43 +184,45 @@ function Navbar() {
               <NavLink
                 to="/artikel"
                 className={({ isActive, isPending }) =>
-                  `text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
+                  `text-color2 text-base hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
                     isActive ? aktif : isPending ? "" : "font-medium"
                   }`
                 }
-                onClick={(e) => checkLoginAndRedirect(e, "/artikel")}
+               
               >
                 Artikel
               </NavLink>
             </li>
+
+            {/* Karir */}
             <li className="flex items-center gap-3">
               <i className="ri-settings-line text-3xl md:hidden text-color2"></i>
               <NavLink
                 to="/karir"
                 className={({ isActive, isPending }) =>
-                  `text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
+                  `text-color2 text-base hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
                     isActive ? aktif : isPending ? "" : "font-medium"
                   }`
                 }
-                onClick={(e) => checkLoginAndRedirect(e, "/artikel")}
+               
               >
                 Karir
               </NavLink>
             </li>
 
-            {/* Contact */}
+            {/* Psychotest */}
             <li className="flex items-center gap-3">
               <i className="ri-image-line text-3xl md:hidden text-color2"></i>
               <NavLink
                 to="/psikotest"
                 className={({ isActive, isPending }) =>
-                  `text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
+                  `text-color2 text-base hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
                     isActive ? aktif : isPending ? "" : "font-medium"
                   }`
                 }
                 onClick={(e) => checkLoginAndRedirect(e, "/psikotest")}
               >
-                Psychotest
+                Psikotest
               </NavLink>
             </li>
 
@@ -270,25 +232,35 @@ function Navbar() {
               <NavLink
                 to="/about"
                 className={({ isActive, isPending }) =>
-                  `text-color2 hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
+                  `text-color2 text-base hover:text-secondary hover:border-b-2 border-secondary hover:font-bold transition-all hover:scale-105 hover:px-2 ${
                     isActive ? aktif : isPending ? "" : "font-medium"
                   }`
                 }
-                onClick={(e) => checkLoginAndRedirect(e, "/about")}
+              
               >
                 About Us
               </NavLink>
             </li>
           </ul>
 
-          <div className="social flex items-center gap-4">
+          {/* Social/Auth Section */}
+          <div className="social flex items-center gap-2 sm:gap-4">
             {isLoading ? (
-              // Tampilkan placeholder/skeleton selama loading
-              <div className="mr-4 w-24 h-12 bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="mr-2 sm:mr-4 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gray-200 rounded-full animate-pulse"></div>
             ) : isLoggedIn ? (
-              <div>
-                <AvatarButton onClick={handleMenuOpen} />   
-                {/* Menu dropdown */}
+              <div className="flex items-center">
+                {/* Avatar Button dengan shadow */}
+                <button
+                  onClick={handleMenuOpen}
+                  className="p-0 border-none bg-transparent cursor-pointer focus:outline-none"
+                  aria-label="User menu"
+                >
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-secondary flex items-center justify-center">
+                    <AvatarButton className="w-full h-full object-cover" />
+                  </div>
+                </button>
+
+                {/* Menu dropdown dengan shadow yang dipertahankan */}
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
@@ -304,31 +276,44 @@ function Navbar() {
                   sx={{
                     "& .MuiPaper-root": {
                       borderRadius: "12px",
-                      boxShadow: "2px 2px 12px 5px rgba(0,0,0,0.5)",
+                      boxShadow: "5px 5px 12px 5px rgba(0,0,0,0.9)", // Shadow dipertahankan
                       minWidth: "180px",
+                      maxWidth: "calc(100vw - 32px)",
                       marginTop: "8px",
-                      bgcolor: "#070F2B",
+                      backgroundColor: "#070F2B",
                       color: "white",
-                      padding: "4px 8px",
+                      padding: "8px 0",
+                      "& .MuiList-root": {
+                        padding: "0",
+                      },
                     },
                     "& .MuiMenuItem-root": {
-                      borderRadius: "8px",
-                      margin: "2px 0",
-                      padding: "8px 12px",
+                      fontSize: "0.9rem",
+                      padding: "8px 16px",
+                      minHeight: "auto",
+                      display: "flex",
+                      alignItems: "center",
                       "&:hover": {
-                        backgroundColor: "#00C3FE",
+                        backgroundColor: "rgba(0, 195, 254, 0.9)",
                         color: "#070F2B",
+                        margin: "0 8px",
+                        borderRadius: "6px",
                         width: "calc(100% - 16px)",
-                        fontWeight: "bold", 
-                        marginLeft: "8px",
-                        marginRight: "8px",
+                      },
+                      "& svg, & i": {
+                        fontSize: "1.1rem",
+                        marginRight: "12px",
+                        width: "20px",
+                        textAlign: "center",
                       },
                     },
                     "& .MuiDivider-root": {
-                      borderColor: "rgba(233, 237, 255, 0.2)",
-                      margin: "4px 8px",
-                      width: "calc(100% - 16px)",
+                      borderColor: "rgba(255, 255, 255, 0.12)",
+                      margin: "6px 0",
                     },
+                  }}
+                  MenuListProps={{
+                    "aria-labelledby": "user-menu-button",
                   }}
                 >
                   <MenuItem
@@ -337,7 +322,7 @@ function Navbar() {
                       handleMenuClose();
                     }}
                   >
-                    <i className="ri-user-line mr-2" /> Profil
+                    <i className="ri-user-line" /> Profil
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -345,7 +330,7 @@ function Navbar() {
                       handleMenuClose();
                     }}
                   >
-                    <i className="ri-history-line mr-2" /> Riwayat
+                    <i className="ri-history-line" /> Riwayat
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -353,7 +338,7 @@ function Navbar() {
                       handleMenuClose();
                     }}
                   >
-                    <i className="ri-file-list-line mr-2" /> Lamaran Saya
+                    <i className="ri-file-list-line" /> Lamaran Saya
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
@@ -361,7 +346,7 @@ function Navbar() {
                       handleMenuClose();
                     }}
                   >
-                    <i className="ri-settings-3-line mr-2" /> Pengaturan
+                    <i className="ri-settings-3-line" /> Pengaturan
                   </MenuItem>
 
                   <Divider />
@@ -372,33 +357,32 @@ function Navbar() {
                       handleMenuClose();
                     }}
                     sx={{
-                      color: "white !important",
+                      color: "#ffffff",
                       "&:hover": {
-                        backgroundColor: "#ff5252 !important",
-                        color: "white",
-                        width: "calc(100% - 16px)",
-                        marginLeft: "8px",
-                        marginRight: "8px",
-                        
+                        backgroundColor: "rgba(255, 82, 82, 0.9) !important",
+                        color: "#ffffff !important",
                       },
                     }}
                   >
-                    <i className="ri-logout-box-r-line mr-2" /> Logout
+                    <i className="ri-logout-box-r-line" /> Logout
                   </MenuItem>
                 </Menu>
               </div>
             ) : (
               <NavLink
                 to="/register"
-                className="bg-color1 mr-4 px-9 py-3 rounded-full text-primary font-semibold border-2 border-transparent hover:bg-primary hover:text-color1 hover:border-color1 hover:shadow-custom4 transition-all shadow-custom text-xl"
+                className="bg-color1 mr-1 sm:mr-4 px-3 sm:px-6 md:px-9 py-1.5 sm:py-3 rounded-full text-primary font-semibold border-2 border-transparent hover:bg-primary hover:text-color1 hover:border-color1 transition-all text-sm sm:text-base shadow-custom shadow-gray-600 hover:shadow-custom4"
               >
                 Sign Up
               </NavLink>
             )}
-            <i
-              className="ri-menu-fold-3-fill text-3xl md:hidden block text-secondary"
+            <button
+              className="md:hidden bg-primary text-secondary focus:outline-none"
               onClick={handleClick}
-            ></i>
+              aria-label="Toggle menu"
+            >
+              <i className="ri-menu-fold-3-fill text-2xl shadow-sm shadow-gray-400"></i>
+            </button>
           </div>
         </div>
       </div>

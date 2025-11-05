@@ -106,13 +106,14 @@ export default function DashboardLayoutBasic({ navigation, children }) {
             boxSizing: 'border-box',
             boxShadow: "rgba(0, 0, 0, 0.9) 0px 0px 12px",
             backgroundColor: '#070F2B',
-            position: 'relative',
+            position: 'fixed', // Mengubah dari 'relative' ke 'fixed'
             zIndex: theme.zIndex.drawer,
             transition: theme.transitions.create('width', {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
             }),
             overflowX: 'hidden',
+            overflowY: 'auto', // Mengatur overflow y ke auto
             height: '100vh',
             display: 'flex',
             flexDirection: 'column',
@@ -231,8 +232,8 @@ export default function DashboardLayoutBasic({ navigation, children }) {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: `calc(100% - ${open ? drawerWidth-56 : 56}px)`,
-          ml: `${open ? drawerWidth-56 : 56}px`,
+          width: `calc(100% - ${open ? drawerWidth-150 : 150}px)`,
+          ml: `${open ? drawerWidth-150 : 50}px`,
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,

@@ -1,6 +1,8 @@
 import heroRegister from "../assets/images/heroRegister.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +18,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/users`, {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/register`, {
         name,
         phoneNumber,
         email,
@@ -24,6 +26,7 @@ const RegisterPage = () => {
         confPassword,
       });
       navigate("/login");
+    toast.success("Registrasi berhasil, silakan login.");
     } catch (err) {
       if (err.response.data.msg) {
         setError(err.response.data.msg);

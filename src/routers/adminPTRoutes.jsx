@@ -2,17 +2,19 @@ import { Route, Routes, Outlet, Navigate } from 'react-router-dom';
 import PrivateRouteAdminPT from '../components/PrivateRoute/PrivateRouteAdminPT';
 import DashboardLayoutBasic from '../components/rekrutmen/adminPT/DashboardLayoutBasic';
 import Dashboard from '../pages/rekrutmen/AdminPt/Dashboard';
-import CreatLowongan from '../pages/rekrutmen/AdminPt/CreatLowongan';
+import DataPelamarPage from '../pages/rekrutmen/AdminPt/DataPelamarPage';
 import CreatSoalPsikotest from '../pages/rekrutmen/AdminPt/CreatSoalPsikotest';
 import LowonganPage from '../pages/rekrutmen/AdminPt/LowonganPage';
 import ApplicantsByLowongan from '../pages/rekrutmen/AdminPt/ApplicantsByLowongan' 
+import UpgradePremium from '../pages/rekrutmen/AdminPt/UpgradePremium';
 import {
   Dashboard as DashboardIcon,
   PostAdd as CreatLowonganIcon,
   People as ApplicantsIcon,
- AddCircle as CreatSoalIcon,  
+  AddCircle as CreatSoalIcon,  
   Settings as SettingsIcon,
-  ExitToApp as LogoutIcon
+  ExitToApp as LogoutIcon,
+  Person as ProfileIcon 
 } from '@mui/icons-material';
 
 // Konfigurasi menu navigasi
@@ -24,23 +26,28 @@ const ADMIN_PT_NAVIGATION = [
   },
   {
     segment: 'create-soal',
-    title: 'Buat Soal Psikotest',
+    title: 'Manajemen Soal Psikotes',
     icon: <CreatSoalIcon />,
   },
   {
     segment: 'create-lowongan',
-    title: 'Buat Lowongan',
+    title: 'Manajemen Lowongan',
     icon: <CreatLowonganIcon />,
   },
   {
-    segment: 'applicants',
-    title: 'Pelamar',
+    segment: 'pelamar',
+    title: 'Manajemen Pelamar',
     icon: <ApplicantsIcon />,
   },
   {
     segment: 'settings',
     title: 'Pengaturan',
     icon: <SettingsIcon />,
+  },
+  {
+    segment: 'settings',
+    title: 'Profile',
+    icon: <ProfileIcon />,
   },
   {
     segment: 'logout',
@@ -56,6 +63,7 @@ const ADMIN_PT_NAVIGATION = [
 export const AdminPTRoutes = () => {
   return (
     <Routes>
+         <Route path="upgrade" element={<UpgradePremium />} />
       <Route
         path="/"
         element={
@@ -73,8 +81,11 @@ export const AdminPTRoutes = () => {
         
         {/* Route untuk daftar pelamar */}
         <Route path="applicants" element={<LowonganPage />} />
+        <Route path="pelamar" element={<DataPelamarPage />} />
+     
         
-        {/* Route untuk detail pelamar per lowongan */}
+     {/* Jika ingin menangani error khusus admin PT */}
+     <Route path="*" element={<Navigate to="/adminpt/dashboard" replace />} />
     
         
         {/* Route settings - asumsikan Anda punya komponen SettingsPage */}

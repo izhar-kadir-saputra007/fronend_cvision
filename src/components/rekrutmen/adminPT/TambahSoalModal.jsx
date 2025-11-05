@@ -8,6 +8,8 @@ import DialogContent from '@mui/joy/DialogContent'
 import Checkbox from '@mui/joy/Checkbox'
 import List from '@mui/joy/List'
 import ListItem from '@mui/joy/ListItem'
+import IconButton from '@mui/joy/IconButton';
+import Tooltip from '@mui/joy/Tooltip';
 import ListItemDecorator from '@mui/joy/ListItemDecorator'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { toast } from 'react-toastify'
@@ -69,16 +71,17 @@ export default function TambahSoalModal({ lowonganId, refreshData = () => {} }) 
 
   return (
     <>
-      <Button
-        variant="outlined"
-        color="neutral"
-        size="sm"
-        onClick={handleOpen}
-        sx={{ ml: 1 }}
-        startDecorator={<AddCircleOutlineIcon />}
-      >
-        Tambah Soal
-      </Button>
+   <Tooltip title="Tambah Soal" placement="top" arrow>
+  <IconButton
+    variant="plain"
+    color="neutral"
+    size="sm"
+    onClick={handleOpen}
+    sx={{ ml: 1 }}
+  >
+    <AddCircleOutlineIcon />
+  </IconButton>
+</Tooltip>
 
       <Modal open={open} onClose={handleClose}>
         <ModalDialog size="lg">

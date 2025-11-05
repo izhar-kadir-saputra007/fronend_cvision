@@ -56,7 +56,7 @@ const ChangePasswordForm = () => {
           throw new Error('Anda belum login');
         }
 
-        const response = await axios.put(
+         await axios.put(
           `${import.meta.env.VITE_BASE_URL}/api/changePassword`,
           {
             currentPassword: values.currentPassword,

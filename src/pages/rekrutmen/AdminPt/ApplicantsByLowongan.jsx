@@ -15,6 +15,9 @@ const ApplicantsByLowongan = () => {
         const response = await getUsersByLowongan(lowonganId)
         setApplicants(response.data.data)
         console.log( "data pelamar", response.data.data)
+        //kita akan menghitung jumlah data pelamar
+        const totalPelamar = response.data.data.length
+        console.log(totalPelamar)
         setLoading(false)
       } catch (error) {
         console.error('Error fetching applicants:', error)

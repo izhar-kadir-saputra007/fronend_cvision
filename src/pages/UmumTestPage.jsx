@@ -1,33 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  Paper, 
+  Container, 
+  CircularProgress,
+  Alert,
+  Card,
+  CardContent,
+  Divider,
+  Chip,
+  
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
-import { useEffect } from "react";
-
 import PieChartUmum from "../components/PieChartUmum";
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 const UmumTestPage = () => {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isPremium, setIsPremium] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
-    // Memuat data prediksi dari localStorage jika tersedia
     const savedPrediction = localStorage.getItem("predictionUmum");
     if (savedPrediction) {
       setPrediction(JSON.parse(savedPrediction));
     }
+    checkUserStatus();
   }, []);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-
-    setPrediction(null);
-    setError("");
+  const checkUserStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/validateToken`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      
+      if (response.data.valid && response.data.user) {
+        setUserInfo(response.data.user);
+        setIsPremium(response.data.user.isPremium);
+      }
+    } catch (err) {
+      console.error("Error checking user status:", err);
+      setIsPremium(false);
+      setUserInfo(null);
+    }
   };
 
-
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
+      setPrediction(null);
+      setError("");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,35 +91,34 @@ const UmumTestPage = () => {
     try {
       const formData = new FormData();
       if (file) {
-        formData.append("file", file); // Key "file" sesuai dengan backend
+        formData.append("file", file);
       } else {
-        throw new Error("Please upload a file or enter resume text.");
+        throw new Error("Silakan unggah file CV Anda.");
       }
   
-   
-  
-  
-      // Kirim request ke endpoint predictCVUmum
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/predictCVUmum`, // Endpoint baru
+        `${import.meta.env.VITE_BASE_URL}/api/predictCVUmum`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           withCredentials: true,
         }
       );
+      
+      if (response.data.user) {
+        setUserInfo(response.data.user);
+        setIsPremium(response.data.user.isPremium);
+      }
   
-      // Simpan hanya data yang diperlukan ke state
       setPrediction({
-        predicted_category: response.data.prediction.posisi, // Ambil "posisi"
-        probability: response.data.prediction.probability, // Ambil "probability"
-        probabilities: response.data.prediction.top_5_positions, // Ambil "top_5_positions"
+        predicted_category: response.data.prediction.posisi,
+        probability: response.data.prediction.probability,
+        probabilities: response.data.prediction.top_5_positions,
       });
   
-      // Simpan ke localStorage
       localStorage.setItem(
         "predictionUmum",
         JSON.stringify({
@@ -77,10 +129,15 @@ const UmumTestPage = () => {
       );
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data?.error ||
-          "An error occurred while processing your request."
-      );
+      
+      if (err.response?.status === 401) {
+        setError("Silakan login terlebih dahulu untuk menggunakan fitur ini.");
+      } else {
+        setError(
+          err.response?.data?.error ||
+            "Terjadi kesalahan saat memproses permintaan Anda."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -89,92 +146,276 @@ const UmumTestPage = () => {
   return (
     <>
       <Navbar />
-      <div className="service pt-60 flex flex-col items-center justify-center ">
-        <div className="flex flex-col gap-5 items-center justify-center px-12 pb-20">
-          <h1 className="text-color1 font-bold text-4xl text-center">
-            {" "}
-            CV ATS Checker Gratis
-          </h1>
-          <h1 className="text-color3">
-            Tool gratis membantu Anda memeriksa apakah CV Anda dioptimalkan
-            untuk applicant tracking systems (ATS).
-          </h1>
-        </div>
-        <h1>Test</h1>
-        <div className="rounded-lg border-secondary border-2 p-10 overflow-hidden shadow-custom3 pb-10">
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center justify-center flex-col gap-5"
-          >
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-              {/* <h1 className="text-2xl font-bold mb-4">Cover photo</h1> */}
-              <div className="border-2 border-dashed border-secondary p-6 rounded-lg px-24 flex flex-col items-center">
-                <label className="text-color2 mb-4 font-semibold">
-                  Upload a file or drag and drop
-                </label>
-
-                <label htmlFor="cv-upload" className="cursor-pointer ">
-                  <input
-                    id="cv-upload"
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className=" hover:bg-color3 text-color2 font-semibold py-2 px-4 rounded-lg border border-color3 shadow-md transition-all"
-                  />
-                </label>
-
-                <p className="text-color3 text-sm mt-3">
-                  PDF CV ATS up to 10MB
-                </p>
-              </div>
-            </div>
-            <button
-              className="items-center bg-secondary px-7 py-2 text-3xl rounded-full text-primary font-semibold border-2 border-transparent hover:bg-primary hover:text-secondary hover:border-secondary transition-all shadow-custom max-w-fit hover:shadow-custom2"
-              type="submit"
-              disabled={loading}
+      <Box sx={{ 
+        backgroundColor: '#070F2B', 
+        minHeight: '100vh',
+        pt: 15,
+        pb: 10
+      }}>
+        <Container maxWidth="md">
+          {/* Header Section */}
+          <Box sx={{ 
+            textAlign: 'center', 
+            mb: 6,
+            px: 2
+          }}>
+            <Typography 
+              variant="h3" 
+              component="h1" 
+              sx={{ 
+                fontWeight: 'bold', 
+                color: '#00C3FE',
+                mb: 2
+              }}
             >
-              {loading ? "Predicting..." : "Predict"}
-            </button>
-          </form>
-          <div className="flex items-center justify-center"></div>
-        </div>
+              CV ATS Checker Gratis
+            </Typography>
+            <Typography 
+              variant="h6" 
+              component="h2" 
+              sx={{ 
+                color: '#9290C3',
+                maxWidth: 600,
+                mx: 'auto'
+              }}
+            >
+              Tool gratis membantu Anda memeriksa apakah CV Anda dioptimalkan
+              untuk applicant tracking systems (ATS).
+            </Typography>
+          </Box>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+          {/* Upload Section */}
+          <Paper 
+            elevation={3} 
+            sx={{ 
+              backgroundColor: '#070F2B',
+              boxShadow: "0px 0px 10px 3px rgba(0,0,0,0.9)",
+              p: 4, 
+              mb: 4,
+              
+              borderRadius: 8
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center',
+                gap: 3
+              }}>
+                <Paper 
+                  variant="outlined" 
+                  sx={{
+                    p: 4,
+                    border: '2px dashed #00C3FE',
+                    width: '100%',
+                    backgroundColor: '#070F2B',
+                    maxWidth: 500,
+                    textAlign: 'center',
+                 
+                  }}
+                >
+                  <CloudUploadIcon sx={{ fontSize: 50, color: '#00C3FE', mb: 2 }} />
+                  <Typography variant="h6" sx={{ color: '#535C91', mb: 2 }}>
+                    {fileName || "Upload file atau drag and drop"}
+                  </Typography>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#535C91',
+                      '&:hover': {
+                        backgroundColor: '#172048',
+                      }
+                    }}
+                  >
+                    Pilih File CV
+                    <VisuallyHiddenInput 
+                      id="cv-upload" 
+                      type="file" 
+                      accept=".pdf" 
+                      onChange={handleFileChange} 
+                    />
+                  </Button>
+                  <Typography variant="caption" sx={{ color: '#9290C3', mt: 2, display: 'block' }}>
+                    PDF CV ATS hingga 5MB
+                  </Typography>
+                </Paper>
 
-        {
-  prediction && (
-    <div className="pt-20 mt-20 px-20 flex  flex-col items-center border-2 border-secondary overflow-hidden shadow-custom3 rounded-md ">
-      <h3 className="text-color1 font-bold">
-        Hasil Prediksi CV Anda :
-      </h3>
-      <p className="text-color2 text-2xl">
-        <strong>Predicted Category:</strong>{" "}
-        <span className="text-color1">
-          {prediction.predicted_category}{" "}
-        </span>{" "}
-        ({prediction.probability})
-      </p>
-      {/* Gabungkan predicted_category dengan top_5_positions */}
-      <div className="flex flex-col items-center text-secondary">
-        
-      {prediction.probabilities && typeof prediction.probabilities === "object" ? (
-        <PieChartUmum
-          probabilities={{
-            [prediction.predicted_category]: prediction.probability, // Tambahkan predicted_category
-            ...prediction.probabilities, // Gabungkan dengan top_5_positions
-          }}
-        />
-      ) : (
-        <p className="text-color2">No probabilities data available.</p>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={loading || !file}
+                  sx={{
+                    backgroundColor: '#00C3FE',
+                    color: '#070F2B',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 50,
+                    '&:hover': {
+                      backgroundColor: '#00a8d9',
+                    },
+                    '&:disabled': {
+                      backgroundColor: '#9290C3',
+                    }
+                  }}
+                >
+                  {loading ? (
+                    <>
+                      <CircularProgress size={24} sx={{ color: 'white', mr: 2 }} />
+                      Memproses...
+                    </>
+                  ) : 'Prediksi Sekarang'}
+                </Button>
+              </Box>
+            </form>
+          </Paper>
+
+          {/* Error Message */}
+          {error && (
+            <Alert severity="error" sx={{ mb: 4 }}>
+              {error}
+            </Alert>
+          )}
+
+          {/* Result Section */}
+          {prediction && (
+  <Paper 
+    elevation={3} 
+    sx={{ 
+      p: 4,
+      mt: 4,
+      mb: 4,
+      borderRadius: 2,
+      backgroundColor: '#070F2B',
+      boxShadow: "0px 0px 10px 3px rgba(0,0,0,0.9)",
+    }}
+  >
+    <Box sx={{ 
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 3
+    }}>
+      <Typography 
+        variant="h4" 
+        component="h3" 
+        sx={{ 
+          fontWeight: 'bold', 
+          color: 'white',
+          mb: 2
+        }}
+      >
+        Hasil Prediksi CV Anda
+      </Typography>
+      
+      <Card 
+        variant="outlined"
+        sx={{ 
+          mb: 3,
+          bgcolor: '#070F2B',
+          borderColor: '#00C3FE'
+        }}
+      >
+        <CardContent sx={{ py: 3 }}>
+          <Typography variant="h5" component="div" sx={{ mb: 1, color: '#00C3FE' }}>
+            <strong>Kategori Prediksi:</strong>
+          </Typography>
+          <Chip 
+            label={prediction.predicted_category}
+            sx={{ 
+              backgroundColor: '#00FF9C',
+              color: '#070F2B',
+              fontSize: '1.1rem',
+              p: 2,
+              mb: 1
+            }}
+          />
+          {isPremium && (
+            <Typography variant="h6" sx={{ mt: 1, color: '#E9EDFF' }}>
+              Tingkat Kecocokan: {prediction.probability}
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Premium Content */}
+      {isPremium && prediction.probabilities && typeof prediction.probabilities === "object" && (
+       <Box sx={{ width: '100%' }}>
+       {/* Top 5 Posisi - Selalu di atas */}
+       <Box sx={{ 
+         width: '100%',
+         mb: 3,
+         p: 2,
+         backgroundColor: '#E9EDFF',
+         borderRadius: 2,
+         boxShadow: 1
+       }}>
+         <Typography variant="h6" sx={{ 
+           mb: 2, 
+           color: '#535C91',
+           textAlign: 'center'
+         }}>
+           Top 5 Posisi
+         </Typography>
+         {Object.entries(prediction.probabilities).map(([key, value]) => (
+           <Box key={key} sx={{ mb: 2 }}>
+             <Typography sx={{ 
+               color: '#070F2B',
+               display: 'flex',
+               justifyContent: 'space-between'
+             }}>
+               <span>{key}:</span> 
+               <strong>{value}</strong>
+             </Typography>
+             <Divider sx={{ 
+               my: 1,
+               borderColor: '#00C3FE',
+               opacity: 0.5
+             }} />
+           </Box>
+         ))}
+       </Box>
+     
+       {/* Chart - Menempati seluruh lebar di bawahnya */}
+       <Box sx={{ width: '100%' }}>
+         <PieChartUmum
+           probabilities={{
+             [prediction.predicted_category]: prediction.probability,
+             ...prediction.probabilities,
+           }}
+         />
+       </Box>
+     </Box>
       )}
-      </div>
-    </div>
-  )
-}
-      </div>
 
-    
-
+      {/* Upgrade Message */}
+      {!isPremium && (
+        <Box sx={{ mt: 2 }}>
+          <Alert 
+            severity="info" 
+            sx={{ 
+              backgroundColor: '#FFE100',
+              color: '#070F2B'
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+              <strong>Upgrade ke Premium</strong>
+            </Typography>
+            <Typography>
+              Untuk melihat detail probability dan grafik perbandingan posisi lainnya, 
+              silakan upgrade ke akun Premium.
+            </Typography>
+          </Alert>
+        </Box>
+      )}
+    </Box>
+  </Paper>
+)}
+        </Container>
+      </Box>
       <Footer />
     </>
   );

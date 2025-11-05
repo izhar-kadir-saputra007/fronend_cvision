@@ -58,6 +58,15 @@ export default {
       lobster: ['Lobster', 'cursive'],
       bodoni: ['Libre Bodoni', 'serif'],
     },
+    screens: {
+      'xs': '400px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+      'mobile': { 'max': '630px' }, // Mobile devices
+    },
   },
   plugins: [],
 }

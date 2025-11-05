@@ -2,6 +2,8 @@ import heroLogin from "../assets/images/heroLogin.png";
 import { Form, Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -32,6 +34,7 @@ const LoginPage = () => {
           default:
             navigate("/home");
         }
+        toast.success("Login berhasil!");
       } else {
         console.error("Token tidak ada dalam respons:", response.data);
       }

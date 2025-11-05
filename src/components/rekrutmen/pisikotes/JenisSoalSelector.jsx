@@ -1,11 +1,27 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  Typography,
+  Button,
+  Stack,
+  Divider,
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Box,
+  CircularProgress,
+  Alert
+} from "@mui/joy";
 
 const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
   const [jenisSoal, setJenisSoal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -38,10 +54,14 @@ const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
         if (!axios.isCancel(err)) {
           console.error("Error fetching jenis soal:", err);
           
+          // Handle 403 response (premium required)
+          if (err.response?.status === 403) {
+            setError("Anda memerlukan akun premium untuk mengakses tes ini");
+            setShowPremiumModal(true);
+          } 
           // Handle 404 response specifically
-          if (err.response?.status === 404) {
+          else if (err.response?.status === 404) {
             setError(err.response.data?.message || "Tidak ada tes yang perlu dikerjakan");
-            // Remove lamaranId from localStorage if it exists
             if (lamaranId) {
               localStorage.removeItem("lamaranId");
             }
@@ -70,80 +90,159 @@ const JenisSoalSelector = ({ onStartTest, lamaranId }) => {
     setError(null);
   };
 
+  const handleUpgradePremium = () => {
+    navigate("/premium"); // Adjust this route based on your app
+  };
+
   if (loading) {
     return (
-      <div className="bg-color4 shadow-lg rounded-lg p-6 border border-color4">
-        <h2 className="text-xl font-semibold text-primary mb-4">
+      <Card variant="outlined" sx={{ p: 3, borderRadius: 'lg' }}>
+        <Typography level="h4" mb={2}>
           {lamaranId ? "Tes yang Perlu Dikerjakan" : "Pilih Jenis Soal"}
-        </h2>
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        </div>
-      </div>
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress />
+        </Box>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-color4 shadow-lg rounded-lg p-6 border border-color4">
-        <h2 className="text-xl font-semibold text-primary mb-4">
-          {lamaranId ? "Tes yang Perlu Dikerjakan" : "Pilih Jenis Soal"}
-        </h2>
-        <div className="text-red-500 p-4 text-center">
-          <p>{error}</p>
-          {!error.includes("Tidak ada") && (
-            <button 
+      <>
+        <Card variant="outlined" sx={{ p: 3, borderRadius: 'lg' }}>
+          <Typography level="h4" mb={2}>
+            {lamaranId ? "Tes yang Perlu Dikerjakan" : "Pilih Jenis Soal"}
+          </Typography>
+          <Alert color="danger" variant="soft" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+          {!error.includes("Tidak ada") && !error.includes("premium") && (
+            <Button 
               onClick={handleRetry}
-              className="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
+              variant="solid"
+              color="primary"
+              fullWidth
             >
               Coba Lagi
-            </button>
+            </Button>
           )}
-        </div>
-      </div>
+        </Card>
+
+        {/* Premium Upgrade Modal */}
+        <Modal open={showPremiumModal} onClose={() => setShowPremiumModal(false)}>
+          <ModalDialog
+            variant="outlined"
+            role="alertdialog"
+            aria-labelledby="premium-modal-title"
+            sx={{
+              maxWidth: 500,
+              borderRadius: 'lg',
+              boxShadow: 'lg',
+              p: 4
+            }}
+          >
+            <ModalClose />
+            <Typography
+              level="h4"
+              id="premium-modal-title"
+              component="h2"
+              mb={2}
+              sx={{ color: 'primary.500' }}
+            >
+              Akses Premium Diperlukan
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Typography level="body-md" mb={3}>
+              Anda memerlukan akun premium untuk mengakses tes ini. Dengan akun premium, Anda akan mendapatkan:
+            </Typography>
+            <Stack spacing={2} mb={4}>
+              <Typography startDecorator="✓" level="body-sm">
+                Akses ke semua jenis tes
+              </Typography>
+              <Typography startDecorator="✓" level="body-sm">
+                Laporan hasil tes lebih detail
+              </Typography>
+              <Typography startDecorator="✓" level="body-sm">
+                Prioritas dukungan pelanggan
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="solid"
+                color="primary"
+                onClick={handleUpgradePremium}
+                fullWidth
+              >
+                Upgrade Sekarang
+              </Button>
+              <Button
+                variant="outlined"
+                color="neutral"
+                onClick={() => setShowPremiumModal(false)}
+                fullWidth
+              >
+                Nanti Saja
+              </Button>
+            </Stack>
+          </ModalDialog>
+        </Modal>
+      </>
     );
   }
 
   if (jenisSoal.length === 0) {
     return (
-      <div className="bg-color4 shadow-lg rounded-lg p-6 border border-color4">
-        <h2 className="text-xl font-semibold text-primary mb-4">
+      <Card variant="outlined" sx={{ p: 3, borderRadius: 'lg' }}>
+        <Typography level="h4" mb={2}>
           {lamaranId ? "Tes yang Perlu Dikerjakan" : "Pilih Jenis Soal"}
-        </h2>
-        <div className="text-gray-500 p-4 text-center">
+        </Typography>
+        <Alert color="neutral" variant="soft">
           {lamaranId 
             ? "Tidak ada tes yang perlu dikerjakan untuk lamaran ini"
             : "Tidak ada tes yang tersedia saat ini"}
-        </div>
-      </div>
+        </Alert>
+      </Card>
     );
   }
 
   return (
-    <div className="bg-color4 shadow-lg rounded-lg p-6 border border-color4">
-      <h2 className="text-xl font-semibold text-primary mb-4">
+    <Card variant="outlined" sx={{ p: 3, borderRadius: 'lg' }}>
+      <Typography level="h4" mb={2}>
         {lamaranId ? "Tes yang Perlu Dikerjakan" : "Pilih Jenis Soal"}
-      </h2>
-      <div className="grid gap-4">
+      </Typography>
+      <Stack spacing={2}>
         {jenisSoal.map((jenis) => (
-          <button
+          <Button
             key={jenis.id}
             onClick={() => onStartTest(jenis.id)}
-            className="p-4 border text-color2 border-primary rounded-lg hover:bg-secondary hover:text-white transition-all text-left"
+            variant="outlined"
+            color="neutral"
+            sx={{
+              p: 2,
+              justifyContent: 'flex-start',
+              textAlign: 'left',
+              '&:hover': {
+                backgroundColor: 'primary.softBg',
+                color: 'primary.softColor'
+              }
+            }}
           >
-            <h3 className="font-semibold text-lg">{jenis.namaJenis}</h3>
-            <p className="text-sm text-gray-600">
-              {jenis.deskripsi || "Klik untuk memulai tes"}
-            </p>
-            {jenis.durasi && (
-              <p className="text-xs text-gray-500 mt-1">
-                Durasi: {jenis.durasi} menit
-              </p>
-            )}
-          </button>
+            <Stack>
+              <Typography level="title-md">{jenis.namaJenis}</Typography>
+              <Typography level="body-sm" textColor="text.tertiary">
+                {jenis.deskripsi || "Klik untuk memulai tes"}
+              </Typography>
+              {jenis.durasi && (
+                <Typography level="body-xs" mt={0.5}>
+                  Durasi: {jenis.durasi} menit
+                </Typography>
+              )}
+            </Stack>
+          </Button>
         ))}
-      </div>
-    </div>
+      </Stack>
+    </Card>
   );
 };
 

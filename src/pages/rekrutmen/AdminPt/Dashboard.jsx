@@ -14,6 +14,9 @@ import {
   Schedule as ScheduleIcon,
 } from "@mui/icons-material";
 
+import PremiumCheck from "../../../components/rekrutmen/adminPT/PremiumCheck";
+
+
 const Dashboard = () => {
   // Data statistik contoh
   const stats = [
@@ -39,7 +42,13 @@ const Dashboard = () => {
     },
   ];
 
+
+
+
+
+
   return (
+    <PremiumCheck>
     <Box
       sx={{
         width: "90%",
@@ -186,16 +195,14 @@ const Dashboard = () => {
         </Grid>
       </Card>
 
-      {/* Bagian Tambahan */}
-      {/* <Paper elevation={2} sx={{ p: 4, borderRadius: 2, mt: 4 }}>
-          <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'medium' }}>
-            Panduan Cepat
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Gunakan menu sidebar untuk mengakses semua fitur sistem rekrutmen.
-          </Typography>
-        </Paper> */}
+      {/* tampilkan jenis soal dari api */}
+            {/* tampilkan jenis soal dari api */}
+     
+      
+
+     
     </Box>
+    </PremiumCheck>
   );
 };
 

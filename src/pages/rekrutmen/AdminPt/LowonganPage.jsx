@@ -23,6 +23,7 @@ const LowonganPage = () => {
     try {
       const response = await getLowonganForAdminPT()
       setLowonganList(response.data.data)
+      console.log('Data lowongan:', response.data.data)
     } catch (error) {
       console.error('Error fetching lowongan:', error)
       toast.error('Gagal memuat data lowongan')
@@ -61,7 +62,9 @@ const LowonganPage = () => {
     <div className="container mx-auto px-4 py-8 text-color2">
       <h1 className="text-3xl font-bold mb-8">Manajemen Lowongan</h1>
 
-      <div className="flex border-b mb-6">
+<div className='p-24'
+style={{ boxShadow: "0px 0px 10px 3px rgba(0,0,0,0.9)" }}>
+      <div className="flex border-b mb-6 ">
         <button
           className={`py-2 px-4 font-medium ${
             activeTab === 'lowongan'
@@ -86,14 +89,7 @@ const LowonganPage = () => {
 
       {activeTab === 'lowongan' && (
         <>
-          <div className="flex justify-end mb-4">
-            <button
-              onClick={() => setActiveTab('buat-lowongan')}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Buat Lowongan Baru
-            </button>
-          </div>
+         
           <LowonganList
             lowonganList={lowonganList}
             onViewApplicants={handleViewApplicants}
@@ -108,6 +104,7 @@ const LowonganPage = () => {
           onCancel={() => setActiveTab('lowongan')}
         />
       )}
+    </div>
     </div>
   )
 }

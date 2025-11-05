@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { 
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Divider,
+  CircularProgress
+} from '@mui/material';
 
 export default function CreateJenisSoal() {
   const [formData, setFormData] = useState({
@@ -57,49 +67,49 @@ export default function CreateJenisSoal() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md text-color2">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Buat Jenis Soal Baru</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="namaJenis" className="block text-sm font-medium text-gray-700 mb-1">
-            Nama Jenis Soal <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="namaJenis"
+    <Card variant="outlined" sx={{ maxWidth: 800, mx: 'auto' }}>
+      <CardContent>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Buat Jenis Soal Baru
+        </Typography>
+        <Divider sx={{ my: 2 }} />
+        
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Nama Jenis Soal"
             name="namaJenis"
             value={formData.namaJenis}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Contoh: Tes Logika, Tes Verbal, dll."
+            margin="normal"
             required
+            placeholder="Contoh: Tes Logika, Tes Verbal, dll."
           />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="deskripsi" className="block text-sm font-medium text-gray-700 mb-1">
-            Deskripsi
-          </label>
-          <textarea
-            id="deskripsi"
+          
+          <TextField
+            fullWidth
+            label="Deskripsi"
             name="deskripsi"
             value={formData.deskripsi}
             onChange={handleChange}
-            rows="3"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            margin="normal"
+            multiline
+            rows={4}
             placeholder="Deskripsi singkat tentang jenis soal ini"
           />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${loading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
-        >
-          {loading ? 'Menyimpan...' : 'Simpan Jenis Soal'}
-        </button>
-      </form>
-    </div>
+          
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={loading}
+              startIcon={loading ? <CircularProgress size={20} /> : null}
+            >
+              {loading ? 'Menyimpan...' : 'Simpan Jenis Soal'}
+            </Button>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }

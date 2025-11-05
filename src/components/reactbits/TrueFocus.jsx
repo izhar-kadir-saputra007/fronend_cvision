@@ -9,7 +9,8 @@ const TrueFocus = ({
   glowColor = "rgba(0, 255, 0, 0.6)",
   animationDuration = 0.5,
   pauseBetweenAnimations = 1,
-  fontColor = "", // Prop baru untuk warna font
+  fontColor = "",
+  className = "" // Tambahkan prop className untuk custom styling
 }) => {
   const words = sentence.split(" ");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,7 +59,7 @@ const TrueFocus = ({
 
   return (
     <div
-      className="relative flex gap-4 justify-center items-center flex-wrap"
+      className={`relative flex gap-2 sm:gap-3 md:gap-4 justify-center items-center flex-wrap ${className}`}
       ref={containerRef}
     >
       {words.map((word, index) => {
@@ -67,7 +68,7 @@ const TrueFocus = ({
           <span
             key={index}
             ref={(el) => (wordRefs.current[index] = el)}
-            className="relative text-[3rem] font-black cursor-pointer"
+            className="relative text-xl sm:text-2xl md:text-3xl lg:text-[3rem] font-black cursor-pointer"
             style={{
               filter: manualMode
                 ? isActive
@@ -78,7 +79,7 @@ const TrueFocus = ({
                   : `blur(${blurAmount}px)`,
               "--border-color": borderColor,
               "--glow-color": glowColor,
-              color: fontColor, // Terapkan warna font
+              color: fontColor,
               transition: `filter ${animationDuration}s ease`,
             }}
             onMouseEnter={() => handleMouseEnter(index)}
@@ -107,28 +108,28 @@ const TrueFocus = ({
         }}
       >
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] left-[-10px] border-r-0 border-b-0"
+          className="absolute w-3 h-3 sm:w-4 sm:h-4 border-[2px] sm:border-[3px] rounded-[3px] top-[-8px] sm:top-[-10px] left-[-8px] sm:left-[-10px] border-r-0 border-b-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 4px var(--border-color))",
           }}
         ></span>
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] top-[-10px] right-[-10px] border-l-0 border-b-0"
+          className="absolute w-3 h-3 sm:w-4 sm:h-4 border-[2px] sm:border-[3px] rounded-[3px] top-[-8px] sm:top-[-10px] right-[-8px] sm:right-[-10px] border-l-0 border-b-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 4px var(--border-color))",
           }}
         ></span>
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] left-[-10px] border-r-0 border-t-0"
+          className="absolute w-3 h-3 sm:w-4 sm:h-4 border-[2px] sm:border-[3px] rounded-[3px] bottom-[-8px] sm:bottom-[-10px] left-[-8px] sm:left-[-10px] border-r-0 border-t-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 4px var(--border-color))",
           }}
         ></span>
         <span
-          className="absolute w-4 h-4 border-[3px] rounded-[3px] bottom-[-10px] right-[-10px] border-l-0 border-t-0"
+          className="absolute w-3 h-3 sm:w-4 sm:h-4 border-[2px] sm:border-[3px] rounded-[3px] bottom-[-8px] sm:bottom-[-10px] right-[-8px] sm:right-[-10px] border-l-0 border-t-0"
           style={{
             borderColor: "var(--border-color)",
             filter: "drop-shadow(0 0 4px var(--border-color))",

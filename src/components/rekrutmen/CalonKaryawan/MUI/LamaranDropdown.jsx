@@ -82,12 +82,12 @@ export default function LamaranDropdown({ lamaranId }) {
     }
 
     const formData = new FormData();
-    formData.append('cv', file);
+    formData.append('file', file);
 
     try {
       setUploading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/upload-cv/${lamaranId}`,
+        `${import.meta.env.VITE_BASE_URL}/api/predictCVPelamar/${lamaranId}`,
         formData,
         {
           headers: {

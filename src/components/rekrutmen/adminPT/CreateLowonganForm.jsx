@@ -1,19 +1,24 @@
-import { useState } from 'react';
+import { useState } from "react";
+import MDEditor from "@uiw/react-md-editor";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 const CreateLowonganForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     judul: '',
     deskripsi: '',
     tanggalTutup: '',
+    persyaratan: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleMarkdownChange = (val) => {
+    setFormData(prev => ({ ...prev, persyaratan: val || '' }));
   };
 
   const handleSubmit = async (e) => {
@@ -25,9 +30,11 @@ const CreateLowonganForm = ({ onSubmit, onCancel }) => {
         judul: '',
         deskripsi: '',
         tanggalTutup: '',
+        persyaratan: '',
       });
-    } catch (error) {
-      console.error('Error submitting:', error);
+//periksa data yang dikirim
+    } catch (err) {
+      console.error('Error submitting form:', err);
     } finally {
       setIsSubmitting(false);
     }
@@ -35,12 +42,26 @@ const CreateLowonganForm = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Buat Lowongan Baru</h2>
-      
+      {/* Inline CSS untuk styling list di preview */}
+      <style>{`
+        .markdown-preview ul {
+          list-style-type: disc !important;
+          padding-left: 4.5rem !important;
+        }
+        .markdown-preview ol {
+          list-style-type: decimal !important;
+          padding-left: 4.5rem !important;
+        }
+        .markdown-preview li {
+          margin-bottom: 0.25rem !important;
+        }
+      `}</style>
+
+      <h2 className="text-2xl font-bold mb-6">Buat Lowongan Baru</h2>
       <form onSubmit={handleSubmit}>
         {/* Judul Lowongan */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="judul">
+          <label htmlFor="judul" className="block font-medium mb-2">
             Judul Lowongan *
           </label>
           <input
@@ -49,32 +70,32 @@ const CreateLowonganForm = ({ onSubmit, onCancel }) => {
             name="judul"
             value={formData.judul}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Contoh: Backend Developer"
             required
-            placeholder="Contoh: Recruitment Backend Developer"
+            className="w-full text-color5 border px-3 py-2 rounded-md bg-[#f6f6f6]"
           />
         </div>
 
         {/* Deskripsi */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="deskripsi">
-            Deskripsi *
+          <label htmlFor="deskripsi" className="block font-medium mb-2">
+            Deskripsi Lowongan *
           </label>
           <textarea
             id="deskripsi"
             name="deskripsi"
             value={formData.deskripsi}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
+            placeholder="Deskripsikan tugas dan tanggung jawab"
+            rows={4}
             required
-            placeholder="Deskripsi lengkap tentang lowongan ini"
+            className="w-full text-color5 border px-3 py-2 rounded-md"
           />
         </div>
 
         {/* Tanggal Tutup */}
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="tanggalTutup">
+        <div className="mb-4">
+          <label htmlFor="tanggalTutup" className="block font-medium mb-2">
             Tanggal Tutup *
           </label>
           <input
@@ -83,36 +104,49 @@ const CreateLowonganForm = ({ onSubmit, onCancel }) => {
             name="tanggalTutup"
             value={formData.tanggalTutup}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            min={new Date().toISOString().split("T")[0]}
             required
-            min={new Date().toISOString().split('T')[0]}
+            className="w-full text-color5 border px-3 py-2 rounded-md"
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+        {/* Persyaratan Khusus (Markdown tanpa tombol preview) */}
+        <div className="mb-6" data-color-mode="light">
+          <label htmlFor="persyaratan" className="block font-medium mb-2">
+            Persyaratan Khusus (Gunakan Markdown) *
+          </label>
+          <MDEditor
+            value={formData.persyaratan}
+            onChange={handleMarkdownChange}
+            height={300}
+            preview="edit"
+          />
+        </div>
+
+        {/* Live Preview */}
+        {formData.persyaratan && (
+          <div className="markdown-preview p-4 border rounded">
+    
+            <MDEditor.Markdown source={formData.persyaratan} />
+          </div>
+        )}
+
+        {/* Tombol Aksi */}
+        <div className="flex justify-end space-x-4">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500"
             disabled={isSubmitting}
+            className="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-100"
           >
             Batal
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
             disabled={isSubmitting}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            {isSubmitting ? (
-              <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Menyimpan...
-              </span>
-            ) : 'Simpan'}
+            {isSubmitting ? "Menyimpan..." : "Simpan"}
           </button>
         </div>
       </form>

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import QuestionNavigation from "../components/rekrutmen/pisikotes/QuestionNavigation";
 import QuestionCard from "../components/rekrutmen/pisikotes/QuestionCard";
 import Timer from "../components/rekrutmen/pisikotes/Timer";
@@ -307,7 +306,7 @@ const PsikotestPage = () => {
           </>
         ) : null}
       </div>
-      <Footer />
+    
     </>
   );
 };
